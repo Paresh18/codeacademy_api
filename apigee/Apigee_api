@@ -1,0 +1,213 @@
+
+
+Welcome to Apigee!
+
+Apigee is a cloud service with an API for you to store data and add new features to your apps.
+
+(Apigee also allows you to build APIs and get analytics for both your apps and APIs - but this course will not cover that, and instead focus on how Apigee helps you build apps.)
+
+Before we begin, you must have an Apigee account. Visit Apigee to sign up!
+
+3/21
+
+Initializing the SDK
+You'll need to begin coding by initializing the Apigee SDK within your client app. This will connect you to Apigee and allow you to access the resources of the service. Apigee uses two distinct values for your credentials.
+
+Organization Name also known as orgName. This value is your Apigee username. It uniquely identifies you to Apigee services.
+Application Name also known as appName. This value is created by you in the Apigee dashboard. sandbox is the app we create for you, it has open permissions that allows you to learn the platform. When you're ready to build another app be sure to create a new one with more strict permissions!
+You've probably noticed that you've included something named Usergrid into your script, and not Apigee. Usergrid is simply the open source project that powers the storage portion of the Apigee platform!
+
+
+4/21
+
+Saving Data to Apigee
+Now we'll want to start saving data to Apigee.
+
+You store data in Apigee by defining entities in groups called collections. Creating and saving entities in app services is an important piece of building your app.
+
+Entities are defined with a:
+1. type: The type of the entity determines in which collection, or group, the entity is saved in the cloud. This value is always singular.
+2. name: Is an identifier for the object that you as a developer can set.
+
+Another property called uuid is also set for you automatically after creating an object. This is to ensure uniqueness with your objects. This is also a good way to trouble shoot if your object was created or not. If there is no uuid yet it hasn't been saved to the server!
+
+
+We use the createEntity() function to create objects and store them in Apigee. This function takes an options object that includes the type, name, and any other data associated with the object. You should use this function any time you want to create an entity in Apigee. The function also takes a callback that will pass back an flag letting us know if there was an error, and if the entity was created successfully it will pass that back.
+
+The pattern of using an options object, and callback is used extensively through the Apigee SDK. You'll see this much more going through the course!
+
+
+5/21
+
+Viewing your data in the Apigee Admin Portal
+Apigee provides you with an easy to use Admin Portal for viewing all the data related to your app. You can navigate through your data entities, view users that have signed up for your app, and look at statistics about what you have stored in your app!
+
+Be sure to hold onto the link for this Admin Portal. It can help you debug any problems you're having with your app, and you can confirm data is being saved to it!
+
+6/21
+
+Using Queries to find data in Apigee
+Queries are a powerful tool in Apigee that allow you to quickly filter and retrieve entities using our query language. Querying is the method of choice when searching for entities across your Apigee collections.
+
+Apigee harnesses a SQL-like query language to search for objects. Your query results will be returned as a collection of objects. The Apigee SDK provides functions to iterate through the results of queries.
+
+
+7/21
+
+Using iterators in query results
+In the previous exercise you ran a query against Apigee, and we knew it would return only one result. However, what if you run a query against your app data and it could return any number of results? Iterators solve that problem.
+
+The Apigee SDK provides you with a set of iterators that allow you to easily run through your sets of query results.
+
+
+8/21
+
+
+Adding locations to your data
+Another powerful feature of Apigee's query system is using location data to locate nearby objects. Before we can do that we need to add location data to our objects!
+
+To enable geoqueries on an object it requires a location. Check out the format for a location object below:
+
+"location": {
+    "latitude": 37.779632,
+    "longitude": -122.395131  
+ } 
+Location presents itself as a nested object with a latitude and longitude. Make sure that these values aren't strings!
+
+The following exercise is going to insert a small data set of 6 landmarks. Each landmark will have the following values:
+
+name : Name of the landmark
+city : City where the landmark is located
+category : The category of the landmark either bridge, statue, or skyscraper
+fact : A special fact about the landmark
+location : The latitude and longitude of the landmark
+
+
+9/21*
+
+Querying for the nearest objects
+Now that we have location data loaded into Apigee. Let's look it up. Geo-queries are just like normal queries in Apigee. A geo-query is formatted like so:
+
+location within <distance in meters> of <latitude>, <longitude>
+Geo-queries are as simple as that syntax. There is nothing else needed to look an object up based on latitude and longitude.
+
+
+10/21*
+
+Query for objects with regular queries and geoqueries
+Apigee's query language is very powerful at helping filter on all sorts of criteria. We can even mix standard queries on object properties along with location based queries to create powerful location enabled apps.
+
+Simply join query statements together with the and modifier to increase the amount of filtering you do on the results that you want returned.
+
+Initialize your client with the proper orgName
+Fill out the query with the following parameters:
+Category: 'statue'
+Location: within 1000 meters
+Latitude: 42.3314
+Longitude: -83.0458
+Get the first result of the query from the landmarks object
+Use the get() function to retrieve the name of the landmark and it's associated fact
+
+
+
+11/21
+
+
+Signing up a user
+Apigee has a 'user' entity that handles many aspects of user management you might need to build for your app - right out of the box.
+
+That is, Apigee helps you create and manage users, build user profiles easily, and create relationships between users, events, and data - they types of things you might need if you were building something like an ad hoc social network for your app.
+
+Signing up a user has a few requirements:
+
+username: This is required.
+password: This is required.
+email: This is required, and must be unique for every user. Apigee will ensure this uniqueness.
+name: This is optional.
+Bonus: After you sign up users with their email we can access their Gravatar picture if they have one. If they don't it's the standard Gravatar placeholder.
+
+
+12/21
+
+Signing in a user
+After signing up your users with your Apigee enabled app, you'll want to build login functionality so you can have users login to your app. This will create a unique session for your user that will allow them to stay signed in to your service until they explicitly sign out.
+
+Don't worry if the result looks similar to the last exercise. These are all important methods for managing your app on the Apigee platform.
+
+Instructions
+Set your orgName in the client!
+Set your username and password in the variables username and password.
+Use the get() function to retrieve the "username" and "picture" properties.
+?
+
+13/21
+
+Figuring out who is logged in
+
+Sometimes it's necessary to get the user who is currently logged into your app. This will let you track the actions they take, and record things like blog posts, pictures uploaded, or users that they follow.
+
+You can use the getLoggedInUser() function in the SDK to determine what user is logged in at any given time.
+
+
+14/21
+
+Working with user activities
+Activities are a simple way to distribute content amongst your users. They represent anything from posting a status, liking a page, or even a blog post.
+
+The SDK takes care of all of this for you out of the box. The createUserActivityWithEntity() function allows you to create user activities using a user entity and some simple content.
+
+Intialize your client with the correct orgName
+Give the variable content the value "Hello, World!". This will be the content of your first activity for your app!
+Get the content for the newly created activity using get("content")
+
+
+15/21*
+
+Following a user
+Apigee services provide a great way to create social networks out of the box. To do this you use a connection with Apigee you can connect two entities with any kind of connection.
+
+One special connection is the "following" connection. The following connection allows you to setup a relationship between users similar to Twitter's following mechanism.
+
+The SDK provides you with a connect() function that allows you to create these connections between users. The connect function takes three special parameters:
+
+connection: Connection defines how the two entities will be connected. For following a user this is simply the string "following"
+entity:This is the entity you'll be connecting to. For a following relationship this would be the user that you want to follow.
+callback: The standard callback letting us know if there was an error or not, and returns data about the connection.
+
+
+You'll be signing me up on your app, and having me follow you! I've already filled out my relevant information to create an account.
+1. Use the connect function to have me follow you. 
+2. Display a helpful message if there was an error saying that it was successful.
+
+?
+Hint
+Remember to intialize your orgName on line 4.
+On line 18 you need to fill in new values for the strings "USERNAME" and "PASSWORD"
+On line 20 you need you fill in "RELATIONSHIP_GOES_HERE" with "followers"
+
+
+
+16/21*
+
+See who is following you
+Now that you've followed a user you'll want to create some functionality to see who is following you. In the SDK you'll find a function called getConnections() this function will retrieve all the entities connected to you using a specific connection. To retrieve all the followers for a particular user we'll want to use the special connection called "followers".
+
+
+
+
+
+  17/21
+
+View a feed of content from who you follow
+After a building out the networking functionality, and giving users the ability to create content you'll probably want to give them the ability to view content as well. You can easily view activity feeds with the App Services SDK using the getFeedForUser() function.
+
+getFeedForUser() allows you to get individual activity feeds for particular users. It's first parameter is a username for the particular user you'd like to retrieve a feed for, and the second is a callback function. The callback itself is unique because it takes three parameters.
+
+error: A flag indicating whether or not an error occurred.
+data: The second is the response object for the API call. If there is any special data you want about the feed it can be found here.
+activities: The last parameter is an array of all the activities in the users feed.
+
+
+
+
+
